@@ -23,7 +23,7 @@
 				}
 			},
 			{
-				"name": "Generate Forecasts & Save to Stagin",
+				"name": "Generate Forecasts and Save to Staging",
 				"type": "DatabricksNotebook",
 				"dependsOn": [
 					{
@@ -54,7 +54,7 @@
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Generate Forecasts & Save to Stagin",
+						"activity": "Generate Forecasts and Save to Staging",
 						"dependencyConditions": [
 							"Succeeded"
 						]
