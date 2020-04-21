@@ -5,10 +5,10 @@
 		"factoryName": {
 			"value": "COVID19CalculatorADF"
 		},
-		"COVID19SQL_connectionString": {
+		"COVID19Databricks_ADFLink_accessToken": {
 			"value": ""
 		},
-		"DatabricksForecasting_accessToken": {
+		"COVID19SQL_connectionString": {
 			"value": ""
 		},
 		"containerUri": {
