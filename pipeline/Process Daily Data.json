@@ -23,38 +23,11 @@
 				}
 			},
 			{
-				"name": "Generate Forecasts and Save to Staging",
-				"type": "DatabricksNotebook",
-				"dependsOn": [
-					{
-						"activity": "Clear Staging Tables",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "7.00:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"notebookPath": "/Hospital Resource Calculator for COVID-19/build forecast"
-				},
-				"linkedServiceName": {
-					"referenceName": "DatabricksForecasting",
-					"type": "LinkedServiceReference"
-				}
-			},
-			{
 				"name": "Process new records",
 				"type": "SqlServerStoredProcedure",
 				"dependsOn": [
 					{
-						"activity": "Generate Forecasts and Save to Staging",
+						"activity": "Forecasting Models",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -73,6 +46,33 @@
 				},
 				"linkedServiceName": {
 					"referenceName": "COVID19SQL",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Forecasting Models",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Clear Staging Tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/build forecast"
+				},
+				"linkedServiceName": {
+					"referenceName": "COVID19Databricks_ADFLink",
 					"type": "LinkedServiceReference"
 				}
 			}
