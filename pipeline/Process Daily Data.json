@@ -69,7 +69,7 @@
 				},
 				"userProperties": [],
 				"typeProperties": {
-					"notebookPath": "/build forecast"
+					"notebookPath": "/Shared/build forecast"
 				},
 				"linkedServiceName": {
 					"referenceName": "COVID19Databricks_ADFLink",
