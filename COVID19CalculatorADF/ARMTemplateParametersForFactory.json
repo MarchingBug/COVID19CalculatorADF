@@ -4,9 +4,6 @@
 	"parameters": {
 		"factoryName": {
 			"value": "COVID19CalculatorADF"
-		},
-		"COVID19SQL_connectionString": {
-			"value": ""
 		}
 	}
 }
