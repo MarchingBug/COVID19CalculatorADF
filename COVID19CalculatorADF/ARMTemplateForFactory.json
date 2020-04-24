@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "COVID19CalculatorADF"
 		},
-		"COVID19Databricks_ADFLink_accessToken": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'COVID19Databricks_ADFLink'"
-		},
 		"COVID19SQL_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'COVID19SQL'"
@@ -20,112 +16,6 @@
 		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
 	},
 	"resources": [
-		{
-			"name": "[concat(parameters('factoryName'), '/Process Daily Data')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Clear Staging Tables",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[DeleteStagingTable]"
-						},
-						"linkedServiceName": {
-							"referenceName": "COVID19SQL",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Process new records",
-						"type": "SqlServerStoredProcedure",
-						"dependsOn": [
-							{
-								"activity": "Forecasting Models",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"storedProcedureName": "[[dbo].[ProcessNewRecords]"
-						},
-						"linkedServiceName": {
-							"referenceName": "COVID19SQL",
-							"type": "LinkedServiceReference"
-						}
-					},
-					{
-						"name": "Forecasting Models",
-						"type": "DatabricksNotebook",
-						"dependsOn": [
-							{
-								"activity": "Clear Staging Tables",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"policy": {
-							"timeout": "7.00:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"notebookPath": "/Shared/build forecast"
-						},
-						"linkedServiceName": {
-							"referenceName": "COVID19Databricks_ADFLink",
-							"type": "LinkedServiceReference"
-						}
-					}
-				],
-				"annotations": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/COVID19SQL')]",
-				"[concat(variables('factoryId'), '/linkedServices/COVID19Databricks_ADFLink')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/COVID19Databricks_ADFLink')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureDatabricks",
-				"typeProperties": {
-					"domain": "https://eastus2.azuredatabricks.net",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('COVID19Databricks_ADFLink_accessToken')]"
-					},
-					"existingClusterId": "0422-205856-celli866"
-				}
-			},
-			"dependsOn": []
-		},
 		{
 			"name": "[concat(parameters('factoryName'), '/COVID19SQL')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
@@ -138,36 +28,6 @@
 				}
 			},
 			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Get New Records')]",
-			"type": "Microsoft.DataFactory/factories/triggers",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"runtimeState": "Started",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "Process Daily Data",
-							"type": "PipelineReference"
-						},
-						"parameters": {}
-					}
-				],
-				"type": "ScheduleTrigger",
-				"typeProperties": {
-					"recurrence": {
-						"frequency": "Hour",
-						"interval": 12,
-						"startTime": "2020-04-23T17:00:00.000Z",
-						"timeZone": "UTC"
-					}
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/Process Daily Data')]"
-			]
 		}
 	]
 }

@@ -7,10 +7,6 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "COVID19CalculatorADF"
 		},
-		"COVID19Databricks_ADFLink_accessToken": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'COVID19Databricks_ADFLink'"
-		},
 		"COVID19SQL_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'COVID19SQL'"
@@ -41,9 +37,6 @@
 				"parameters": {
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
-					},
-					"COVID19Databricks_ADFLink_accessToken": {
-						"value": "[parameters('COVID19Databricks_ADFLink_accessToken')]"
 					},
 					"COVID19SQL_connectionString": {
 						"value": "[parameters('COVID19SQL_connectionString')]"
