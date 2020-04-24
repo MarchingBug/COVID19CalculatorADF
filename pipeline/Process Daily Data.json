@@ -1,0 +1,82 @@
+{
+	"name": "Process Daily Data",
+	"properties": {
+		"activities": [
+			{
+				"name": "Clear Staging Tables",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[DeleteStagingTable]"
+				},
+				"linkedServiceName": {
+					"referenceName": "COVID19SQL",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Forecasting Models",
+				"type": "DatabricksNotebook",
+				"dependsOn": [
+					{
+						"activity": "Clear Staging Tables",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"notebookPath": "/Shared/build forecast"
+				},
+				"linkedServiceName": {
+					"referenceName": "COVID19Databricks_ADFLink",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "Process New Records",
+				"type": "SqlServerStoredProcedure",
+				"dependsOn": [
+					{
+						"activity": "Forecasting Models",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[dbo].[ProcessNewRecords]"
+				},
+				"linkedServiceName": {
+					"referenceName": "COVID19SQL",
+					"type": "LinkedServiceReference"
+				}
+			}
+		],
+		"annotations": []
+	}
+}
