@@ -1,0 +1,24 @@
+{
+	"name": "Update Daily Data",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "Process Daily Data",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 12,
+				"startTime": "2020-04-24T17:00:00.000Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
