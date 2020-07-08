@@ -3,7 +3,7 @@
 	"contentVersion": "1.0.0.0",
 	"parameters": {
 		"factoryName": {
-			"value": "COVID19CalculatorADF"
+			"value": "COVID19CALCULATORADF"
 		},
 		"COVID19Databricks_ADFLink_accessToken": {
 			"value": ""
